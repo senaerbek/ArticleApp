@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Application.Articles;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+ 
     public class ArticlesController : BaseApiController
     {
         private readonly IMediator _mediator;
