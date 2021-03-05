@@ -1,14 +1,23 @@
-import React, { useState } from "react";
-import { Button, Container, Form, Icon, Segment } from "semantic-ui-react";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Container,
+  Form,
+  Icon,
+  Message,
+  Segment,
+} from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/Actions/AuthActions";
 import { useHistory } from "react-router-dom";
 
-export default function Login() {
+export default function Login(props) {
   const dispatch = useDispatch();
   let history = useHistory();
   const [user, setuser] = useState({});
-
+  const uInfo = useSelector((state) => state.authReducer);
+  const isLogin = uInfo.isLogin;
+  console.log(uInfo);
   function handleChange(event) {
     const { name, value } = event.target;
     setuser((pUser) => ({
@@ -21,6 +30,14 @@ export default function Login() {
     event.preventDefault();
     dispatch(login(user));
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      setTimeout(function () {
+        history.push("/dashboard");
+      }, 1000);
+    }
+  }, [isLogin]);
 
   return (
     <div>
@@ -40,6 +57,17 @@ export default function Login() {
               placeholder="**************"
               onChange={handleChange}
             />
+
+            {isLogin === false ? (
+              <div>
+                <Message style={{ marginBottom: "10px" }} negative>
+                  <Message.Header>Hata</Message.Header>
+                  <p>Kullanıcı adı veya şifreniz yanlış.</p>
+                </Message>
+              </div>
+            ) : (
+              <div></div>
+            )}
             <Button color="teal" animated>
               <Button.Content visible>Giriş</Button.Content>
               <Button.Content hidden>
