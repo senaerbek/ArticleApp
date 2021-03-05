@@ -8,5 +8,6 @@ namespace Domain
         public string Title { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
         public string ArticleContent { get; set; }
+        public byte[] ArticleImage { get; set; }
     }
 }

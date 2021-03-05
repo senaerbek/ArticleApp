@@ -36,29 +36,38 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-           services.AddDbContext<ArticleContext>(options => {
+            services.AddDbContext<ArticleContext>(options =>
+            {
                 options.UseSqlServer(@"Server=DESKTOP-E1T0HQ2; initial catalog=ArticleApp; integrated security=true");
             });
             services.AddMediatR(typeof(List.Handler).Assembly);
-            services.AddIdentityCore<User>(opt => {
-                 opt.Password.RequireDigit = false;
-                    opt.Password.RequireLowercase = false;
-                    opt.Password.RequireNonAlphanumeric = false;
-                    opt.Password.RequireUppercase = false;
-                    opt.Password.RequiredLength = 4;
+            services.AddIdentityCore<User>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequiredLength = 4;
             }).AddEntityFrameworkStores<ArticleContext>().AddSignInManager<SignInManager<User>>();
-           
-           var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret key secret key"));
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret key secret key"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(option=>{
-                option.TokenValidationParameters = new TokenValidationParameters{
-                    ValidateIssuerSigningKey= true,
+            .AddJwtBearer(option =>
+            {
+                option.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = key,
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
             services.AddScoped<TokenHelper>();
+            services.AddCors(options =>
+        {
+            options.AddPolicy("AllowOrigin", builder => builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+        });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +77,7 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin() /*get, post, put, delete, patch... izin ver*/);
 
             app.UseHttpsRedirection();
 

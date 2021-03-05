@@ -1,11 +1,15 @@
 import React from "react";
-import Navigation from "../Navigation/Navigation";
+import { Container } from "semantic-ui-react";
+import ArticleList from "../Articles/ArticleList";
 
 export default function Dashboard() {
 
   return (
     <div>
-      Makale Listesi Gelecek
+       
+      <Container>
+        <ArticleList/>
+      </Container>
     </div>
   );
 }

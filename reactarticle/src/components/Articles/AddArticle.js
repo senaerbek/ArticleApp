@@ -1,11 +1,16 @@
 import React from "react";
 import { Button, Container, Form, FormField, Input, TextArea } from "semantic-ui-react";
+import Navigation from "../Navigation/Navigation";
 
 export default function AddArticle() {
+  const submitHandler = ()=>{
+    console.log("eklendi");
+  }
   return (
     <div>
+      <Navigation/>
       <Container>
-        <Form>
+        <Form onSubmit={submitHandler}>
           <Form.Group widths="equal">
             <Form.Field
               id="form-input-control-first-name"
