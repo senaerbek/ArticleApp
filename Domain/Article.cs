@@ -5,9 +5,10 @@ namespace Domain
     public class Article
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public string Title { get; set; }
-        public DateTime Date { get; set; } = DateTime.UtcNow;
+        public string Date { get; set; } 
         public string ArticleContent { get; set; }
-        public byte[] ArticleImage { get; set; }
+        public string ArticleImage { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using Persistence;
 
 namespace Application.Articles
 {
+    //Tüm makaleler ana sayfa için
     public class List
     {
         public class Query : IRequest<List<Article>> { }
