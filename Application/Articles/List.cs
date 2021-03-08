@@ -5,15 +5,17 @@ using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System.Linq;
+using System;
 
 namespace Application.Articles
 {
     //Tüm makaleler ana sayfa için
     public class List
     {
-        public class Query : IRequest<List<Article>> { }
+        public class Query : IRequest<List<UserArticleDTO>> { }
 
-        public class Handler : IRequestHandler<Query, List<Article>>
+        public class Handler : IRequestHandler<Query, List<UserArticleDTO>>
         {
             private readonly ArticleContext _articleContext;
             public Handler(ArticleContext articleContext)
@@ -21,10 +23,23 @@ namespace Application.Articles
                 _articleContext = articleContext;
             }
 
-            public async Task<List<Article>> Handle(Query request, CancellationToken cancellationToken)
+            public  Task<List<UserArticleDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var articles = await _articleContext.Articles.ToListAsync();
-                return articles;
+                var articles =  from user in _articleContext.Users
+                join article in _articleContext.Articles
+                on user.Id equals (article.UserId).ToString()
+                select new UserArticleDTO {
+
+                    ArticleId = article.Id,
+                   UserName = user.UserName,
+                   UserId = user.Id.ToString(),
+                   Title = article.Title,
+                   Date = article.Date,
+                   ArticleContent = article.ArticleContent,
+                   ArticleImage = article.ArticleImage
+                };
+               
+                return articles.ToListAsync();
             }
         }
     }

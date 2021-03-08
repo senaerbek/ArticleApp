@@ -8,7 +8,7 @@ export const login = (loginUser) => async (dispatch) =>{
     try {
         const {data} = await axios.post(API_BASE+ "/Auth/login", loginUser);
         dispatch({type:LOGIN_SUCCESS, payload: data })
-        localStorage.setItem('user',JSON.stringify(data))
+        localStorage.setItem('token',(data.token))
     } catch (error) {
         dispatch({
             type : LOGIN_FAIL,

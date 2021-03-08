@@ -3,18 +3,19 @@ import { Item, Grid, Segment } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getArticles } from "../../redux/Actions/ArticleActions";
 import Navigation from "../Navigation/Navigation";
+import { Link } from "react-router-dom";
 
 export default function ArticleList() {
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.articleReducer);
-  
+
   useEffect(() => {
     dispatch(getArticles());
   }, []);
 
   return (
     <div>
-      <Navigation/>
+      <Navigation />
       {!articles.articles ? (
         <div>asdfasd</div>
       ) : (
@@ -26,14 +27,20 @@ export default function ArticleList() {
                   <Item>
                     <Item.Image
                       size="tiny"
-                      src="https://react.semantic-ui.com/images/wireframe/image.png"
+                      src={"data:image/png;base64," + a.articleImage}
                     />
 
                     <Item.Content>
-                      <Item.Header as="a">{a.title}</Item.Header>
-                      <Item.Meta>Description</Item.Meta>
+                      <Link to={"/details/" + a.articleId}>
+                        <Item.Header as="a">
+                          {a.title} -- {a.articleId}
+                        </Item.Header>
+                      </Link>
+                      <Link to={"profile/" + a.userId}><Item.Meta>{a.userName}</Item.Meta>
+                      </Link>
+                      
                       <Item.Description>
-                        {a.articleContent.substr(0,400)}
+                        {a.articleContent.substr(0, 400)}
                       </Item.Description>
                       <Item.Extra>{a.date}</Item.Extra>
                     </Item.Content>
@@ -42,8 +49,10 @@ export default function ArticleList() {
               </Segment>
             ))}
           </Grid.Column>
+         
         </Grid>
       )}
+      
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import {combineReducers} from "redux"
-import {articleReducer} from "../Reducers/ArticleReducers"
+import {articleReducer, articleDetailReducer} from "../Reducers/ArticleReducers"
 import {authReducer} from "../Reducers/AuthReducers"
 
 const rootReducer = combineReducers({
     articleReducer,
-    authReducer
+    authReducer,
+    articleDetailReducer
 })
 
 export default rootReducer;
