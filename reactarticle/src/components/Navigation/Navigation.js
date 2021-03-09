@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Menu, Image, Container, Button } from "semantic-ui-react";
 import logo from "../../Images/reactlogo.png";
+
 export default function Navigation() {
   return (
     <div style={{ marginBottom: "100px" }}>
@@ -24,6 +25,7 @@ export default function Navigation() {
           </Menu.Item>
         </Container>
       </Menu>
+      
     </div>
   );
 }

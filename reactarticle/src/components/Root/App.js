@@ -2,7 +2,6 @@ import "../../App.css";
 import Dashboard from "./Dashboard";
 import { Route, Switch } from "react-router-dom";
 import AddArticle from "../Articles/AddArticle";
-import Navigation from "../Navigation/Navigation";
 import HomePage from "../Auth/HomePage";
 import ArticleDetails from "../Articles/ArticleDetails";
 import ProfileInfo from "../Profile/ProfileInfo";

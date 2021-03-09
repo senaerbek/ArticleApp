@@ -33,7 +33,10 @@ export default function ArticleList() {
                     <Item.Content>
                       <Link to={"/details/" + a.articleId}>
                         <Item.Header as="a">
-                          {a.title} -- {a.articleId}
+                          <h2>
+                             {a.title} -- {a.articleId}
+                          </h2>
+                         
                         </Item.Header>
                       </Link>
                       <Link to={"profile/" + a.userId}><Item.Meta>{a.userName}</Item.Meta>

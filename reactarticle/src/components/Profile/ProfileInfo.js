@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Segment, Menu, Item } from "semantic-ui-react";
+import { Container, Segment,  Item } from "semantic-ui-react";
 import Navigation from "../Navigation/Navigation";
 import logo from "../../Images/reactlogo.png";
 

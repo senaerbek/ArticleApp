@@ -3,13 +3,16 @@ import {
   Button,
   Container,
   Form,
+  Header,
   Icon,
+  Image,
   Message,
   Segment,
 } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/Actions/AuthActions";
 import { useHistory } from "react-router-dom";
+import logo from "../../Images/reactlogo.png"
 
 export default function Login(props) {
   const dispatch = useDispatch();
@@ -18,6 +21,7 @@ export default function Login(props) {
   const uInfo = useSelector((state) => state.authReducer);
   const isLogin = uInfo.isLogin;
   console.log(uInfo);
+  
   function handleChange(event) {
     const { name, value } = event.target;
     setuser((pUser) => ({
@@ -43,6 +47,9 @@ export default function Login(props) {
     <div>
       <Container text>
         <Segment>
+          <Header as="h2" color="teal" textAlign="center">
+            <Image src={logo} /> Log-in to your account
+          </Header>
           <Form onSubmit={handleSave} error>
             <Form.Input
               name="Email"
@@ -50,6 +57,7 @@ export default function Login(props) {
               placeholder="joe@schmoe.com"
               onChange={handleChange}
             />
+
             <Form.Input
               name="Password"
               type="Password"
@@ -68,7 +76,7 @@ export default function Login(props) {
             ) : (
               <div></div>
             )}
-            <Button color="teal" animated>
+            <Button  textAlign='center' fluid size="large" color="teal" animated>
               <Button.Content visible>Giriş</Button.Content>
               <Button.Content hidden>
                 <Icon name="arrow right" />
