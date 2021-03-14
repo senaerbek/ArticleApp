@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Persistence;
 
 using System.Linq;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Articles
 {
@@ -25,10 +25,10 @@ namespace Application.Articles
         public class Handler : IRequestHandler<Command>
         {
             private readonly ArticleContext _articleContext;
-            private readonly IHttpContextAccessor contextAccessor;
+            private readonly IHttpContextAccessor _contextAccessor;
             public Handler(ArticleContext articleContext, IHttpContextAccessor contextAccessor)
             {
-                this.contextAccessor = contextAccessor;
+                _contextAccessor = contextAccessor;
                 _articleContext = articleContext;
             }
 
@@ -45,10 +45,20 @@ namespace Application.Articles
                         }
                     }
                 }
-                request.Article.UserId = Guid.Parse(contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+              
                 request.Article.Date = DateTime.Now.ToString();
 
                 _articleContext.Articles.Add(request.Article);
+
+                var user = await _articleContext.Users.SingleOrDefaultAsync(x=>x.UserName == _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name));
+
+                var like = new UserArticle{
+                    User =user,
+                    Article = request.Article,
+                    isHost = true
+                };
+                _articleContext.UserArticles.Add(like);
+
                 var success = await _articleContext.SaveChangesAsync() > 0;
                 if (success)
                 {

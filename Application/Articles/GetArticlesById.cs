@@ -7,40 +7,34 @@ using MediatR;
 using Persistence;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Application.Articles
 {
     // Makale detayları
     public class GetArticlesById
     {
-        public class Query : IRequest<UserArticleDTO> {
-            public Guid Id { get; set; }
-         }
-        public class Handler : IRequestHandler<Query, UserArticleDTO>
+        public class Query : IRequest<ArticleDTO>
         {
-             private readonly ArticleContext _articleContext;
-            public Handler(ArticleContext articleContext)
+            public Guid Id { get; set; }
+        }
+        public class Handler : IRequestHandler<Query, ArticleDTO>
+        {
+            private readonly ArticleContext _articleContext;
+            private readonly IMapper _mapper;
+            public Handler(ArticleContext articleContext, IMapper mapper)
             {
+                _mapper = mapper;
                 _articleContext = articleContext;
             }
-            public Task<UserArticleDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ArticleDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-                var articles = ( from user in _articleContext.Users
-                join article in _articleContext.Articles
-                on user.Id equals (article.UserId).ToString()
-                where article.Id == request.Id
-                select new UserArticleDTO {
-                    ArticleId = article.Id,
-                   UserName = user.UserName,
-                   UserId = user.Id.ToString(),
-                   Title = article.Title,
-                   Date = article.Date,
-                   ArticleContent = article.ArticleContent,
-                   ArticleImage = article.ArticleImage
-                });
-                
-               var a = articles.SingleOrDefaultAsync();
-                return a;
+                var article = await _articleContext.Articles.Include(x => x.UserArticles).ThenInclude(y => y.User)
+                .SingleOrDefaultAsync(x => x.Id == request.Id);
+
+                var map = _mapper.Map<Article, ArticleDTO>(article);
+                return map;
+
             }
         }
     }

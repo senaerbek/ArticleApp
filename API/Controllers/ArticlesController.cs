@@ -24,14 +24,14 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        public async Task<ActionResult<List<UserArticleDTO>>> GetArticles()
+        public async Task<ActionResult<List<ArticleDTO>>> GetArticles()
         {
 
             return await _mediator.Send(new List.Query());
 
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserArticleDTO>> GetArticleById(Guid Id)
+        public async Task<ActionResult<ArticleDTO>> GetArticleById(Guid Id)
         {
             return await _mediator.Send(new GetArticlesById.Query { Id = Id });
         }
@@ -55,5 +55,10 @@ namespace API.Controllers
             return await _mediator.Send(new DeleteArticle.Command{Id = id});
         }
 
+
+        [HttpPost("{id}/like")]
+        public async Task<ActionResult<Unit>> Like(Guid Id){
+            return await _mediator.Send(new Like.Command{Id = Id});
+        }
     }
 }

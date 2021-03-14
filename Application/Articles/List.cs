@@ -7,39 +7,30 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System.Linq;
 using System;
+using AutoMapper;
 
 namespace Application.Articles
 {
     //Tüm makaleler ana sayfa için
     public class List
     {
-        public class Query : IRequest<List<UserArticleDTO>> { }
+        public class Query : IRequest<List<ArticleDTO>> { }
 
-        public class Handler : IRequestHandler<Query, List<UserArticleDTO>>
+        public class Handler : IRequestHandler<Query, List<ArticleDTO>>
         {
             private readonly ArticleContext _articleContext;
-            public Handler(ArticleContext articleContext)
+            private readonly IMapper _mapper;
+            public Handler(ArticleContext articleContext, IMapper mapper)
             {
+                _mapper = mapper;
                 _articleContext = articleContext;
             }
 
-            public  Task<List<UserArticleDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<ArticleDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var articles =  from user in _articleContext.Users
-                join article in _articleContext.Articles
-                on user.Id equals (article.UserId).ToString()
-                select new UserArticleDTO {
-
-                    ArticleId = article.Id,
-                   UserName = user.UserName,
-                   UserId = user.Id.ToString(),
-                   Title = article.Title,
-                   Date = article.Date,
-                   ArticleContent = article.ArticleContent,
-                   ArticleImage = article.ArticleImage
-                };
-               
-                return articles.ToListAsync();
+                var user = await _articleContext.Articles.Include(x => x.UserArticles).ThenInclude(y => y.User).ToListAsync();
+                var map = _mapper.Map<List<Article>,List<ArticleDTO>>(user);
+                return map;
             }
         }
     }

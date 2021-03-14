@@ -29,9 +29,7 @@ namespace Application.Articles
             }
             public async Task<List<Article>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var Id = Guid.Parse(accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                var articles = await _articleContext.Articles.Where(x => x.UserId == Id).ToListAsync();
-                return articles;
+               throw new Exception("");
             }
         }
     }
